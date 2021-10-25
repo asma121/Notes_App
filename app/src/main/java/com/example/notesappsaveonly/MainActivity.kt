@@ -12,23 +12,31 @@ class MainActivity : AppCompatActivity() {
     lateinit var rv:RecyclerView
     lateinit var button: Button
     lateinit var etNote:EditText
+    lateinit var dbHelper:DbHelper
     var note=""
-    //var notes=ArrayList<String>()
+    var notes=ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         rv=findViewById(R.id.rv)
         button=findViewById(R.id.button)
         etNote=findViewById(R.id.etNote)
+        dbHelper=DbHelper(applicationContext)
+
+       recyclerView()
 
         button.setOnClickListener {
             note=etNote.text.toString()
-            val dbHelper=DbHelper(applicationContext)
             val status=dbHelper.addNote(note)
-            //notes.add(note)
-           // rv.adapter=myAdapter(notes)
-           // rv.layoutManager=LinearLayoutManager(this)
+            recyclerView()
             Toast.makeText(applicationContext,"Note Added  "+status,Toast.LENGTH_LONG).show()
         }
+
+    }
+
+    fun recyclerView(){
+        notes=dbHelper.retrieveNotes()
+        rv.adapter=myAdapter(notes)
+        rv.layoutManager=LinearLayoutManager(this)
     }
 }
