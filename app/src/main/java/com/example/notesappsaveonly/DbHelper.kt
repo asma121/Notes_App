@@ -32,6 +32,16 @@ class DbHelper(context: Context) :SQLiteOpenHelper(context,"userNotes.db",null,1
             allNotes.add(c.getString(c.getColumnIndex("Note")))
         }
         return allNotes
+    }
 
+
+    fun updateNote(input:String,n:String){
+        val cv=ContentValues()
+        cv.put("Note",input)
+        SQLiteDatabase.update("Notes",cv,"Note=?", arrayOf(n))
+    }
+
+    fun deleteNote(n:String){
+        SQLiteDatabase.delete("Notes","Note=?", arrayOf(n))
     }
 }
